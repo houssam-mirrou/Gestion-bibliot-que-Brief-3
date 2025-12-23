@@ -5,13 +5,16 @@ CREATE TABLE user (
     email VARCHAR(50) NOT NULL UNIQUE,
     biography VARCHAR(300),
     role VARCHAR(20) DEFAULT 'user' CHECK (role IN ('user', 'admin', 'author')),
-    phone_number VARCHAR(30)
+    phone_number VARCHAR(30),
+    password VARCHAR(100) NOT NULL,
+    profile_picture VARCHAR(255) DEFAULT 'profile.png';
 );
 
 CREATE TABLE livre (
     id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(30) NOT NULL,
     author_name VARCHAR(30) NOT NULL,
+    genre VARCHAR(30) NOT NULL,
     date_of_distrubution DATE NOT NULL,
     author_id INT NOT NULL,
     CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES user(id)
