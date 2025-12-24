@@ -1,29 +1,28 @@
-CREATE TABLE user (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    first_name VARCHAR(30) NOT NULL,
-    last_name VARCHAR(30) NOT NULL,
-    email VARCHAR(50) NOT NULL UNIQUE,
-    biography VARCHAR(300),
-    role VARCHAR(20) DEFAULT 'user' CHECK (role IN ('user', 'admin', 'author')),
-    phone_number VARCHAR(30),
-    password VARCHAR(100) NOT NULL,
-    profile_picture VARCHAR(255) DEFAULT 'profile.png';
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(100) NOT NULL,
+    lastName VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    phone_number VARCHAR(30) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('reader','admin') DEFAULT 'reader' NOT NULL 
 );
 
-CREATE TABLE livre (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    title VARCHAR(30) NOT NULL,
-    author_name VARCHAR(30) NOT NULL,
-    genre VARCHAR(30) NOT NULL,
-    date_of_distrubution DATE NOT NULL,
-    author_id INT NOT NULL,
-    CONSTRAINT fk_author_id FOREIGN KEY (author_id) REFERENCES user(id)
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(150) NOT NULL,
+    year INT NOT NULL,
+    status ENUM('available','borrowed') NOT NULL DEFAULT 'available'
 );
 
-CREATE TABLE emprunt (
-    id_user INT NOT NULL,
-    id_livre INT NOT NULL,
-    PRIMARY KEY (id_user, id_livre),
-    CONSTRAINT fk_emprunt_user FOREIGN KEY (id_user) REFERENCES user(id), 
-    CONSTRAINT fk_emprunt_livre FOREIGN KEY (id_livre) REFERENCES livre(id) 
+CREATE TABLE borrows (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    readerId INT NOT NULL,
+    bookId INT NOT NULL,
+    borrowDate DATETIME NOT NULL,
+    returnDate DATETIME NULL,
+    FOREIGN KEY (readerId) REFERENCES users(id),
+    FOREIGN KEY (bookId) REFERENCES books(id),
+    PRIMARY KEY (readerId,bookId)
 );
