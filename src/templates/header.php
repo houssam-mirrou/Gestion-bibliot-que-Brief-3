@@ -58,14 +58,12 @@
         <div>
             <ul class="flex gap-3 items-center">
                 <?php if (!isset($_SESSION['user_id'])) {
-                    // TWEAK 1: Sign In is now an OUTLINE button (Secondary)
                     echo '<li>
                             <a href="/sign-in" class="px-6 py-2.5 inline-block border-2 border-[#4A4036] text-[#4A4036] font-bold text-sm rounded-full hover:bg-[#4A4036] hover:text-white transition-all duration-300">
                                 Sign In
                             </a>
                           </li>';
                     
-                    // TWEAK 2: Sign Up is a SOLID button (Primary)
                     echo '<li>
                             <a href="/sign-up" class="px-6 py-2.5 inline-block border-2 border-[#4A4036] bg-[#4A4036] text-white font-bold text-sm rounded-full hover:bg-transparent hover:text-[#4A4036] transition-all duration-300 shadow-md">
                                 Sign Up
