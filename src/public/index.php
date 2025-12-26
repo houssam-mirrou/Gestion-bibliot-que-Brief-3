@@ -4,6 +4,8 @@ require __DIR__ . '/../classes/AuthController.php';
 require __DIR__ . '/../classes/Reader.php';
 require __DIR__ . '/../classes/Admin.php';
 require __DIR__ . '/../classes/Session.php';
+require __DIR__ . '/../classes/Helpers.php';
+require __DIR__ . '/../classes/Book.php';
 
 $session = new Session();
 
