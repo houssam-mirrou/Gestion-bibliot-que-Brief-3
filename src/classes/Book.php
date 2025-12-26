@@ -7,13 +7,20 @@ class Book {
     private string $year;
     private string $status;
     private string $genre;
+    private string $description;
+    private int $id;
 
-    public function __construct($title,$author,$year,$status,$genre){
+    public function __construct($id,$title,$author,$year,$status,$genre,$description = null){
+        $this->description = 'hello';
+        $this->id = $id;
         $this->title = $title;
         $this->author = $author;
         $this->year = $year;
         $this->status = $status;
         $this->genre = $genre;
+    }
+    public function get_id(){
+        return $this->id;
     }
     public function get_title(){
         return $this->title;
@@ -30,5 +37,7 @@ class Book {
     public function get_genre(){
         return $this->genre;
     }
-
+    public function get_description(){
+        return $this->description;
+    }
 }

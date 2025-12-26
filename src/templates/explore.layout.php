@@ -131,7 +131,7 @@
 
                                 <div class="mt-auto pt-4 border-t border-[#F2EFE9] flex justify-between items-center">
                                     <span class="text-xs text-[#8C7B6C]">Published <?= $book->get_year() ?></span>
-                                    <a href="/book-details" class="text-[#4A4036] font-bold text-sm hover:underline">Details &rarr;</a>
+                                    <a href="/book-details?id=<?= $book->get_id() ?>" class="text-[#4A4036] font-bold text-sm hover:underline">Details &rarr;</a>
                                 </div>
                             </div>
                         </div>

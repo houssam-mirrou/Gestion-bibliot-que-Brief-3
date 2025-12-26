@@ -18,12 +18,12 @@ CREATE TABLE books (
 );
 
 CREATE TABLE borrows (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     readerId INT NOT NULL,
     bookId INT NOT NULL,
     borrowDate DATETIME NOT NULL,
     returnDate DATETIME NULL,
     returned tinyint(1) DEFAULT 0,
     FOREIGN KEY (readerId) REFERENCES users(id),
-    FOREIGN KEY (bookId) REFERENCES books(id),
-    PRIMARY KEY (readerId,bookId)
+    FOREIGN KEY (bookId) REFERENCES books(id)
 );

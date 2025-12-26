@@ -81,5 +81,47 @@ class Helpers {
         }
         return $errors;
     }
-
+    public static function get_book_by_id($data,$id){
+        $query = 'SELECT * from books where id = :id;';
+        $params = [
+            'id'=>$id
+        ];
+        $result = $data->query($query,$params);
+        if($result == []){
+            return null;
+        }
+        return $result[0];
+    }
+    public static function borrow_book($data,$id_user,$id_book){
+        $query = 'INSERT into borrows (readerId,bookId,borrowDate)
+                  values (:id_user,:id_book,:borrow_date)';
+        $params = [
+            'id_user'=>$id_user,
+            'id_book'=>$id_book,
+            'borrow_date'=>date('Y-m-d')
+        ];
+        $result = $data->query($query,$params);
+        if($result){
+            $update_query = 'UPDATE books set status = :status where id = :id_book;';
+            $update_params = [
+                'status'=>'borrowed',
+                'id_book'=>$id_book
+            ];
+            $data->query($update_query,$update_params);
+            return true;
+        }
+        return false;
+    }
+    public static function update_book_status($data,$id_book,$status){
+        $query = 'UPDATE books set status = :status where id = :id_book;';
+        $params = [
+            'status'=>$status,
+            'id_book'=>$id_book
+        ];
+        $result = $data->query($query,$params);
+        if($result){
+            return true;
+        }
+        return false;
+    }
 }
