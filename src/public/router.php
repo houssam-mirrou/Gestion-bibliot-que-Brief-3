@@ -13,6 +13,7 @@ $routes = [
     '/sign-out' => __DIR__ . '/../controllers/sign-out.php',
     '/profile' => __DIR__ . '/../controllers/profile.php',
     '/admin' => __DIR__ . '/../controllers/admin.php',
+    '/book-details' => __DIR__ . '/../controllers/book-details.php',
 ];
 
 function route_to_controller($uri, $routes ,$params = [])
