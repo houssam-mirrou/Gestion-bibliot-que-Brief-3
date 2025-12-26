@@ -10,11 +10,15 @@ $routes = [
     '/contact' => __DIR__ . '/../controllers/contact.php',
     '/sign-in' => __DIR__ . '/../controllers/sign-in.php',
     '/sign-up' => __DIR__ . '/../controllers/sign-up.php',
+    '/sign-out' => __DIR__ . '/../controllers/sign-out.php',
+    '/profile' => __DIR__ . '/../controllers/profile.php',
+    '/admin' => __DIR__ . '/../controllers/admin.php',
 ];
 
-function route_to_controller($uri, $routes)
+function route_to_controller($uri, $routes ,$params = [])
 {
     if (array_key_exists($uri, $routes)) {
+        extract($params);
         require $routes[$uri];
     } else {
         abort();
@@ -28,4 +32,7 @@ function abort($code = 404)
     die();
 }
 
-route_to_controller($uri, $routes);
+route_to_controller($uri, $routes,[
+    'data' => $data ?? null,
+    'session' => $session ?? null
+]);

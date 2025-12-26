@@ -17,7 +17,6 @@ CREATE TABLE books (
 );
 
 CREATE TABLE borrows (
-    id INT AUTO_INCREMENT PRIMARY KEY,
     readerId INT NOT NULL,
     bookId INT NOT NULL,
     borrowDate DATETIME NOT NULL,

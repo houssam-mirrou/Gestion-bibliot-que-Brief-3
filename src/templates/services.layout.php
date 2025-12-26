@@ -46,7 +46,7 @@
                             </li>
                         </ul>
 
-                        <?php if(isset($_SESSION['user_id'])): ?>
+                        <?php if(isset($_SESSION['user'])): ?>
                             <a href="/explore" class="inline-block w-full text-center py-3 border-2 border-[#4A4036] text-[#4A4036] font-bold rounded-lg hover:bg-[#4A4036] hover:text-white transition-colors">
                                 Start Borrowing
                             </a>
@@ -88,7 +88,7 @@
                             </li>
                         </ul>
 
-                        <?php if(isset($_SESSION['user_id'])): ?>
+                        <?php if(isset($_SESSION['user'])): ?>
                             <a href="/profile" class="inline-block w-full text-center py-3 bg-[#4A4036] text-white font-bold rounded-lg hover:bg-[#362e26] transition-colors">
                                 Manage Publications
                             </a>

@@ -57,7 +57,7 @@
 
         <div>
             <ul class="flex gap-3 items-center">
-                <?php if (!isset($_SESSION['user_id'])) {
+                <?php if (!isset($_SESSION['role'])) {
                     echo '<li>
                             <a href="/sign-in" class="px-6 py-2.5 inline-block border-2 border-[#4A4036] text-[#4A4036] font-bold text-sm rounded-full hover:bg-[#4A4036] hover:text-white transition-all duration-300">
                                 Sign In
@@ -70,7 +70,7 @@
                             </a>
                           </li>';
                 } else {
-                    if ($_SESSION['is_admin'] == 1) {
+                    if ($_SESSION['role'] == 'admin') {
                         echo '<li><a href="/admin" class="px-6 py-2.5 inline-block border-2 border-transparent hover:border-[#4A4036] text-[#4A4036] font-bold text-sm rounded-full transition-all duration-300">Admin</a></li>';
                     } else {
                         echo '<li><a href="/profile" class="px-6 py-2.5 inline-block border-2 border-transparent hover:border-[#4A4036] text-[#4A4036] font-bold text-sm rounded-full transition-all duration-300">Profile</a></li>';

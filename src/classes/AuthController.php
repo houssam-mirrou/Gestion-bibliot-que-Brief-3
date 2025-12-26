@@ -8,7 +8,7 @@ class AuthController
         if ($errors === true) {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $query =
-                'INSERT into users (first_name,last_name,email,phone_number,password) 
+                'INSERT into users (firstName,lastName,email,phone_number,password) 
                 values (:first_name,:last_name,:email,:phone_number,:password)';
             $params = [
                 'first_name' => $first_name,
@@ -21,11 +21,6 @@ class AuthController
         }
         return $errors;
     }
-    private static function sign_out() {
-        session_destroy();
-        header('Location: /');
-        exit();
-    }
     public static function sign_in($data, $email, $password)
     {
         $errors = [];
@@ -34,29 +29,20 @@ class AuthController
             $errors['email'] = 'This email is invalid';
         }
 
-        if (!static::email_available($email, $data)) {
-            $errors['email'] = 'This email already been taken';
+        if (static::email_available($email, $data)) {
+            $errors['email'] = 'There\'s no account with this email.';
         }
 
-        if (!static::validate_password($password, $data)) {
-            $errors['email'] = 'The password must be valid';
+        if (!static::same_password($email,$password, $data)) {
+            $errors['password'] = 'Incorrect password.';
         }
         if (empty($errors)) {
-            $query = 'SELECT password from users where email = :email;';
-            $params = [
-                'email' => $email
-            ];
-            $result = $data->query($query, $params);
-            if (password_verify($password, $result[0]['mot_de_pass'])) {
-                return true;
-            } else {
-                $errors['password'] = 'The password is incorrect';
-            }
+            return true;
         }
         return $errors;
     }
 
-    public static function fields_verifications($data, $email, $password, $first_name, $last_name, $phone_number, $reconfirm_password)
+    private static function fields_verifications($data, $email, $password, $first_name, $last_name, $phone_number, $reconfirm_password)
     {
         $errors = [];
         if (!static::validate_email($email)) {
@@ -82,17 +68,17 @@ class AuthController
         }
         return true;
     }
-    private function validate_email($email)
+    private static function validate_email($email)
     {
-        $email=trim($email);
+        $email = trim($email);
         if ($email === null) {
             return false;
         }
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
-    private function validate_name($name)
+    private static function validate_name($name)
     {
-        $name=trim($name);
+        $name = trim($name);
         if ($name === null) {
             return false;
         }
@@ -102,9 +88,9 @@ class AuthController
         }
         return false;
     }
-    private function validate_phone($phone_number)
+    private static function validate_phone($phone_number)
     {
-        $phone_number=trim($phone_number);
+        $phone_number = trim($phone_number);
         if ($phone_number == null) {
             return false;
         }
@@ -115,7 +101,20 @@ class AuthController
         }
         return false;
     }
-    private function validate_password($password, $reconfirm_password)
+    private static function same_password($email,$password,$data)
+    {
+        $query = 'SELECT password from users where email = :email;';
+        $params = [
+            'email' => $email
+        ];
+        $result = $data->query($query, $params);
+        if (password_verify($password, $result[0]['password'])) {
+            return true;
+        } 
+        return false;
+    }
+
+    private static function validate_password($password, $reconfirm_password)
     {
         $password = trim($password);
         $reconfirm_password = trim($reconfirm_password);
@@ -133,7 +132,7 @@ class AuthController
         }
         return false;
     }
-    private function email_available($email, $data)
+    private static function email_available($email, $data)
     {
         $email = trim($email);
         $query = 'SELECT email from users where email = :email;';
@@ -147,17 +146,23 @@ class AuthController
         return false;
     }
 
-    private function get_user_id($data, $email)
+    public static function get_current_user($data, $email)
     {
-        $email=trim($email);
-        $query = 'SELECT id from users where email = :email';
+        $query = 'SELECT * from users where email = :email';
         $params = [
             'email' => $email
         ];
         $result = $data->query($query, $params);
-        if ($result == []) {
-            return false;
-        }
-        return $result[0]['id'];
+        return $result[0];
+    }
+
+    public static function get_role($data, $email)
+    {
+        $query = 'SELECT role from users where email = :email';
+        $params = [
+            'email' => $email
+        ];
+        $result = $data->query($query, $params);
+        return $result[0]['role'];
     }
 }
