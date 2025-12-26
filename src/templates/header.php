@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
 </head>
 
 <body class="min-h-screen flex flex-col bg-[#FDFBF7] text-[#4A4036]"> 

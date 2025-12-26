@@ -1,5 +1,5 @@
 <main class="flex-grow container mx-auto px-4 md:px-8 py-12">
-    
+
     <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
         <div>
             <h1 class="text-4xl font-bold text-[#4A4036]">Explore Collection</h1>
@@ -16,18 +16,18 @@
     </div>
 
     <div class="flex flex-col lg:flex-row gap-10">
-        
+
         <aside class="w-full lg:w-1/4 h-fit lg:sticky lg:top-40 z-0">
             <div class="bg-white p-6 rounded-xl shadow-sm border border-[#E6DCCF]">
-                
+
                 <div class="mb-8">
                     <label class="block text-sm font-bold text-[#4A4036] mb-2 uppercase tracking-wide">Search</label>
                     <div class="relative">
-                        <input type="text" placeholder="Title, author, ISBN..." 
+                        <input type="text" placeholder="Title, author, ISBN..."
                             class="w-full bg-[#FDFBF7] border border-[#E6DCCF] text-[#4A4036] text-sm rounded-lg focus:ring-[#4A4036] focus:border-[#4A4036] block w-full p-3 pl-10" />
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-[#8C7B6C]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
                     </div>
@@ -80,126 +80,65 @@
         </aside>
 
         <section class="w-full lg:w-3/4">
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                
-                <div class="bg-white rounded-xl shadow-sm border border-[#E6DCCF] overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 bg-[#F2EFE9] relative overflow-hidden">
-                         <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Book Cover">
-                         <div class="absolute top-3 right-3 bg-[#D4EDDA] text-[#155724] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                            Available
-                         </div>
-                    </div>
-                    <div class="p-5 flex-grow flex flex-col">
-                        <div class="text-xs font-bold text-[#8C7B6C] uppercase mb-1 tracking-wider">Classic</div>
-                        <h3 class="text-xl font-bold text-[#4A4036] mb-1 leading-tight">The Old Library</h3>
-                        <p class="text-sm text-[#6B5D52] mb-4">by A. H. Anderson</p>
-                        
-                        <div class="mt-auto pt-4 border-t border-[#F2EFE9] flex justify-between items-center">
-                            <span class="text-xs text-[#8C7B6C]">Published 1924</span>
-                            <a href="/book-details" class="text-[#4A4036] font-bold text-sm hover:underline">Details &rarr;</a>
-                        </div>
-                    </div>
-                </div>
+                <?php
+                if (empty($books)) {
+                    echo '<h1>There\'s n books in the bookshelf';
+                } else {
+                    foreach ($books as $book) {
+                ?>
+                        <div class="bg-white rounded-xl shadow-sm border border-[#E6DCCF] overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
+                            <div class="h-56 bg-[#F2EFE9] relative overflow-hidden">
+                                <img src="<?php
+                                    switch ($book->get_genre()){
+                                        case 'Fiction':
+                                            echo '/img/fiction.png';
+                                            break;
+                                        case 'Science':
+                                            echo '/img/science.jpg';
+                                            break;
+                                        case 'History':
+                                            echo '/img/history.jpg';
+                                            break;
+                                        case 'Biography':
+                                            echo '/img/biography.jpg';
+                                            break;
+                                        case 'Fantasy':
+                                            echo '/img/fantasy.png';
+                                            break;
+                                    }
+                                         
+                                ?>"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Book Cover">
+                                <?php if ($book->get_status() == 'borrowed') { ?>
+                                    <div class="absolute top-3 right-3 bg-[#F8D7DA] text-[#721C24] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                                        Borrowed
+                                    </div>
+                                <?php
+                                } else {
+                                ?>
+                                    <div class="absolute top-3 right-3 bg-[#D4EDDA] text-[#155724] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                                        <?= $book->get_status() ?>
+                                    </div>
+                                <?php
+                                } ?>
+                            </div>
+                            <div class="p-5 flex-grow flex flex-col">
+                                <div class="text-xs font-bold text-[#8C7B6C] uppercase mb-1 tracking-wider"><?= $book->get_genre() ?></div>
+                                <h3 class="text-xl font-bold text-[#4A4036] mb-1 leading-tight"><?= $book->get_title() ?></h3>
+                                <p class="text-sm text-[#6B5D52] mb-4">by <?= $book->get_author() ?></p>
 
-                <div class="bg-white rounded-xl shadow-sm border border-[#E6DCCF] overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 bg-[#F2EFE9] relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" alt="Book Cover">
-                         <div class="absolute top-3 right-3 bg-[#F8D7DA] text-[#721C24] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                            Borrowed
-                         </div>
-                    </div>
-                    <div class="p-5 flex-grow flex flex-col">
-                        <div class="text-xs font-bold text-[#8C7B6C] uppercase mb-1 tracking-wider">Self Help</div>
-                        <h3 class="text-xl font-bold text-[#4A4036] mb-1 leading-tight">Atomic Habits</h3>
-                        <p class="text-sm text-[#6B5D52] mb-4">by James Clear</p>
-                        
-                        <div class="mt-auto pt-4 border-t border-[#F2EFE9] flex justify-between items-center">
-                            <span class="text-xs text-[#8C7B6C]">Published 2018</span>
-                            <a href="/book-details" class="text-[#4A4036] font-bold text-sm hover:underline">Details &rarr;</a>
+                                <div class="mt-auto pt-4 border-t border-[#F2EFE9] flex justify-between items-center">
+                                    <span class="text-xs text-[#8C7B6C]">Published <?= $book->get_year() ?></span>
+                                    <a href="/book-details" class="text-[#4A4036] font-bold text-sm hover:underline">Details &rarr;</a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-[#E6DCCF] overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 bg-[#F2EFE9] relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=400" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Book Cover">
-                         <div class="absolute top-3 right-3 bg-[#D4EDDA] text-[#155724] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                            Available
-                         </div>
-                    </div>
-                    <div class="p-5 flex-grow flex flex-col">
-                        <div class="text-xs font-bold text-[#8C7B6C] uppercase mb-1 tracking-wider">History</div>
-                        <h3 class="text-xl font-bold text-[#4A4036] mb-1 leading-tight">The Great War</h3>
-                        <p class="text-sm text-[#6B5D52] mb-4">by H. G. Wells</p>
-                        
-                        <div class="mt-auto pt-4 border-t border-[#F2EFE9] flex justify-between items-center">
-                            <span class="text-xs text-[#8C7B6C]">Published 1910</span>
-                            <a href="/book-details" class="text-[#4A4036] font-bold text-sm hover:underline">Details &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-[#E6DCCF] overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 bg-[#F2EFE9] relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&q=80&w=400" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Book Cover">
-                         <div class="absolute top-3 right-3 bg-[#D4EDDA] text-[#155724] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                            Available
-                         </div>
-                    </div>
-                    <div class="p-5 flex-grow flex flex-col">
-                        <div class="text-xs font-bold text-[#8C7B6C] uppercase mb-1 tracking-wider">Science</div>
-                        <h3 class="text-xl font-bold text-[#4A4036] mb-1 leading-tight">Cosmos</h3>
-                        <p class="text-sm text-[#6B5D52] mb-4">by Carl Sagan</p>
-                        
-                        <div class="mt-auto pt-4 border-t border-[#F2EFE9] flex justify-between items-center">
-                            <span class="text-xs text-[#8C7B6C]">Published 1980</span>
-                            <a href="/book-details" class="text-[#4A4036] font-bold text-sm hover:underline">Details &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-                 <div class="bg-white rounded-xl shadow-sm border border-[#E6DCCF] overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 bg-[#F2EFE9] relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=400" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Book Cover">
-                         <div class="absolute top-3 right-3 bg-[#D4EDDA] text-[#155724] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                            Available
-                         </div>
-                    </div>
-                    <div class="p-5 flex-grow flex flex-col">
-                        <div class="text-xs font-bold text-[#8C7B6C] uppercase mb-1 tracking-wider">Fiction</div>
-                        <h3 class="text-xl font-bold text-[#4A4036] mb-1 leading-tight">Into the Wild</h3>
-                        <p class="text-sm text-[#6B5D52] mb-4">by Jon Krakauer</p>
-                        
-                        <div class="mt-auto pt-4 border-t border-[#F2EFE9] flex justify-between items-center">
-                            <span class="text-xs text-[#8C7B6C]">Published 1996</span>
-                            <a href="/book-details" class="text-[#4A4036] font-bold text-sm hover:underline">Details &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-                 <div class="bg-white rounded-xl shadow-sm border border-[#E6DCCF] overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
-                    <div class="h-56 bg-[#F2EFE9] relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=400" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Book Cover">
-                         <div class="absolute top-3 right-3 bg-[#F8D7DA] text-[#721C24] text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                            Borrowed
-                         </div>
-                    </div>
-                    <div class="p-5 flex-grow flex flex-col">
-                        <div class="text-xs font-bold text-[#8C7B6C] uppercase mb-1 tracking-wider">Fantasy</div>
-                        <h3 class="text-xl font-bold text-[#4A4036] mb-1 leading-tight">Harry Potter</h3>
-                        <p class="text-sm text-[#6B5D52] mb-4">by J.K. Rowling</p>
-                        
-                        <div class="mt-auto pt-4 border-t border-[#F2EFE9] flex justify-between items-center">
-                            <span class="text-xs text-[#8C7B6C]">Published 1997</span>
-                            <a href="/book-details" class="text-[#4A4036] font-bold text-sm hover:underline">Details &rarr;</a>
-                        </div>
-                    </div>
-                </div>
+                <?php
+                    }
+                }
+                ?>
 
             </div>
 
