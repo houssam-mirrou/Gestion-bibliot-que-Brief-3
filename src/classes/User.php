@@ -15,21 +15,16 @@ abstract class User
         $this->phone_number = $phone_number;
     }
 
-    protected function check_role($data)
-    {
-        $query = 'SELECT role from users where email = :email';
-        $result = $data->query($query, [':email' => $this->email]);
-        if ($result == []) {
-            return false;
-        }
-        return $result[0];
+    public function get_first_name(){
+        return $this->first_name;
     }
-
-    public function __destruct()
-    {
-        $this->first_name = '';
-        $this->last_name = '';
-        $this->email = '';
-        $this->phone_number = '';
+    public function get_last_name(){
+        return $this->last_name;
+    }
+    public function get_email(){
+        return $this->email;
+    }
+    public function get_phone_number(){
+        return $this->phone_number;
     }
 }
