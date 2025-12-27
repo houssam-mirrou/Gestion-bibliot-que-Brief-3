@@ -119,7 +119,7 @@
                                 echo 'there\'s no book in the bookshelf';
                             } else {
                                 foreach ($books as $book) {
-                                    $show_book = new Book($book['title'], $book['author'], $book['year'], $book['status'], $book['genre']);
+                                    $show_book = new Book($book['id'],$book['title'], $book['author'], $book['year'], $book['status'], $book['genre']);
                             ?>
                                     <tr class="hover:bg-[#FDFBF7] transition-colors">
                                         <td class="px-6 py-4 font-bold text-[#4A4036]"><?= $show_book->get_title() ?></td>

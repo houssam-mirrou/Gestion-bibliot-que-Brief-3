@@ -59,7 +59,7 @@
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-[#E6DCCF] flex items-center justify-between">
                     <div>
                         <p class="text-xs font-bold text-[#8C7B6C] uppercase">Active Loans</p>
-                        <p class="text-3xl font-bold text-[#4A4036]">2</p>
+                        <p class="text-3xl font-bold text-[#4A4036]"><?= $number_of_borrowed_books ?></p>
                     </div>
                     <div class="p-3 bg-[#F2EFE9] rounded-full text-[#4A4036]">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-[#E6DCCF] flex items-center justify-between">
                     <div>
                         <p class="text-xs font-bold text-[#8C7B6C] uppercase">Total Read</p>
-                        <p class="text-3xl font-bold text-[#4A4036]">14</p>
+                        <p class="text-3xl font-bold text-[#4A4036]"><?= $number_of_borrowed_books_history ?></p>
                     </div>
                     <div class="p-3 bg-[#F2EFE9] rounded-full text-[#4A4036]">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,17 +108,16 @@
                         </thead>
                         <tbody class="divide-y divide-[#F2EFE9] text-sm">
                             <?php
-                            if ($raw_data == []) {
-                                echo '<p class="p-6 text-center text-[#8C7B6C]">You have not borrowed any books yet.</p>';
+                            if (empty($loans)) {
+                                echo '<tr><td colspan="4" class="p-6 text-center text-[#8C7B6C]">You have not borrowed any books yet.</td></tr>';
                             } else {
                                 foreach ($loans as $item):
-                                    // Extract objects for easier reading
                                     $borrow = $item['borrow'];
                                     $book   = $item['book'];
                             ?>
                                     <tr class="hover:bg-[#FDFBF7] transition-colors">
                                         <td class="px-6 py-4 flex items-center gap-3">
-                                            <div class="h-10 w-8 bg-gray-200 rounded overflow-hidden">
+                                            <div class="h-10 w-8 bg-gray-200 rounded overflow-hidden flex-shrink-0">
                                                 <img src="/img/<?= strtolower($book->get_genre()) ?>.png"
                                                     class="object-cover h-full w-full"
                                                     onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=100'">
@@ -126,48 +125,40 @@
                                             <span class="font-bold text-[#4A4036]"><?= $book->get_title() ?></span>
                                         </td>
 
-                                        <td class="px-6 py-4 text-[#6B5D52]"><?= $borrow->get_borrowDate() ?></td>
+                                        <td class="px-6 py-4 text-[#6B5D52]">
+                                            <?= date('M d, Y', strtotime($borrow->get_borrowDate())) ?>
+                                        </td>
 
                                         <td class="px-6 py-4 text-[#6B5D52]">
-                                            <?= $borrow->get_returnDate() ? $borrow->get_returnDate() : 'Not returned' ?>
+                                            <?php if ($borrow->get_returnDate()): ?>
+                                                <?= date('M d, Y', strtotime($borrow->get_returnDate())) ?>
+                                            <?php else: ?>
+                                                <span class="text-gray-400 italic">--</span>
+                                            <?php endif; ?>
                                         </td>
 
                                         <td class="px-6 py-4 text-right">
                                             <?php if ($borrow->is_returned()): ?>
-                                                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">Returned</span>
+                                                <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-600 rounded text-xs font-bold border border-gray-200">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    Returned
+                                                </span>
                                             <?php else: ?>
-                                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">Active</span>
+                                                <form action="#" method="POST">
+                                                    <input type="hidden" name="borrow_id" value="<?= $borrow->get_id() ?>">
+                                                    <input type="hidden" name="book_id" value="<?= $book->get_id() ?>">
+
+                                                    <button type="submit" class="px-3 py-1.5 bg-white border border-[#E6DCCF] text-[#4A4036] rounded text-xs font-bold hover:bg-[#4A4036] hover:text-white hover:border-[#4A4036] transition-all shadow-sm">
+                                                        Return Book
+                                                    </button>
+                                                </form>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
                             <?php endforeach;
                             } ?>
-                            <tr class="hover:bg-[#FDFBF7] transition-colors">
-                                <td class="px-6 py-4 flex items-center gap-3">
-                                    <div class="h-10 w-8 bg-gray-200 rounded overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=100" class="object-cover h-full w-full">
-                                    </div>
-                                    <span class="font-bold text-[#4A4036]">The Old Library</span>
-                                </td>
-                                <td class="px-6 py-4 text-[#6B5D52]">Dec 24, 2025</td>
-                                <td class="px-6 py-4 text-[#6B5D52]">Jan 07, 2026</td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">On Time</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-[#FDFBF7] transition-colors">
-                                <td class="px-6 py-4 flex items-center gap-3">
-                                    <div class="h-10 w-8 bg-gray-200 rounded overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=100" class="object-cover h-full w-full">
-                                    </div>
-                                    <span class="font-bold text-[#4A4036]">Atomic Habits</span>
-                                </td>
-                                <td class="px-6 py-4 text-[#6B5D52]">Dec 20, 2025</td>
-                                <td class="px-6 py-4 text-[#6B5D52]">Jan 03, 2026</td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">Due Soon</span>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
