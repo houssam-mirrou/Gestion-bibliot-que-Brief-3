@@ -138,7 +138,7 @@ class Helpers
     public static function get_borrowed_books_by_user($data, $id_user)
     {
         $query = 'SELECT 
-                br.id as borrow_id,       -- Alias this to avoid conflict
+                br.id as borrow_id,   
                 br.readerId,
                 br.bookId,
                 br.borrowDate,
@@ -157,7 +157,51 @@ class Helpers
         $params = ['id_user' => $id_user];
         $result = $data->query($query, $params);
 
-        // Ensure we return an array, even if empty
+        return $result ? $result : [];
+    }
+
+    public static function count_borrowed_books_by_user($data,$id_user)
+    {
+        $query = 'SELECT COUNT(*) as count FROM borrows WHERE returned = 0 and readerId = :id_user;';
+        $result = $data->query($query,['id_user' => $id_user]);
+        if ($result) {
+            return (int)$result[0]['count'];
+        }
+        return 0;
+    }
+    public static function get_number_of_borrowed_books_history_by_user($data,$id_user)
+    {
+        $query = 'SELECT COUNT(*) as count FROM borrows WHERE readerId = :id_user;';
+        $result = $data->query($query,['id_user' => $id_user]);
+        if ($result) {
+            return (int)$result[0]['count'];
+        }
+        return 0;
+    }
+    public static function get_borrowed_books_and_users($data)
+    {
+        $query = 'SELECT 
+                br.id as borrow_id,   
+                br.readerId,
+                br.bookId,
+                br.borrowDate,
+                br.returnDate,
+                br.returned,
+                b.title,
+                b.author,
+                b.year,
+                b.status,
+                b.genre,
+                u.firstName as user_firstName,
+                u.lastName as user_lastName,
+                u.email as user_email
+              FROM borrows br
+              JOIN books b ON b.id = br.bookId
+              JOIN users u on u.id= br.readerId
+              ORDER BY br.borrowDate DESC';
+
+        $result = $data->query($query);
+
         return $result ? $result : [];
     }
 }
