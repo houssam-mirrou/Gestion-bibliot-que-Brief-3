@@ -187,17 +187,21 @@ class Helpers
                 br.borrowDate,
                 br.returnDate,
                 br.returned,
+                b.id as book_id,
                 b.title,
                 b.author,
                 b.year,
                 b.status,
                 b.genre,
+                u.id as user_id,
                 u.firstName as user_firstName,
                 u.lastName as user_lastName,
-                u.email as user_email
+                u.email as user_email,
+                u.phone_number as phone_number
               FROM borrows br
               JOIN books b ON b.id = br.bookId
               JOIN users u on u.id= br.readerId
+              where br.returned = 0
               ORDER BY br.borrowDate DESC';
 
         $result = $data->query($query);

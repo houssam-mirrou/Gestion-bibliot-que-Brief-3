@@ -4,7 +4,6 @@ $current_user = $_SESSION['user'];
 $errors;
 $books = Helpers::get_books($data);
 $borrowed_books_and_users = Helpers::get_borrowed_books_and_users($data);
-dd($borrowed_books_and_users);
 $fields = [];
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title'])) {
     $title = $_POST['title'];

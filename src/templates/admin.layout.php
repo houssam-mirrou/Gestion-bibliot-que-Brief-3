@@ -57,33 +57,42 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#F2EFE9] text-sm">
-                            <tr class="hover:bg-[#FDFBF7] transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">JD</div>
-                                        <div>
-                                            <p class="font-bold text-[#4A4036]">John Doe</p>
-                                            <p class="text-xs text-[#8C7B6C]">ID: #42</p>
+                            <?php
+                            foreach ($borrowed_books_and_users as $entry) {
+                                $borrow = new Borrow($entry['borrow_id'], $entry['user_id'], $entry['book_id'], $entry['borrowDate'], $entry['returnDate'], $entry['returned']);
+                                $book = new Book($entry['book_id'], $entry['title'], $entry['author'], $entry['year'], $entry['status'], $entry['genre']);
+                                $reader = new Reader($entry['user_firstName'], $entry['user_lastName'], $entry['user_email'], $entry['phone_number']);
+                            ?>
+                                <tr class="hover:bg-[#FDFBF7] transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs"><?= $reader->get_first_name()[0] . $reader->get_last_name()[0]?></div>
+                                            <div>
+                                                <p class="font-bold text-[#4A4036]"><?= $reader->get_first_name(). ' ' . $reader->get_last_name()?></p>
+                                                <p class="text-xs text-[#8C7B6C]">ID: <?= $entry['user_id'] ?></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-10 bg-gray-200 rounded overflow-hidden">
-                                            <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=100" class="w-full h-full object-cover">
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-10 bg-gray-200 rounded overflow-hidden">
+                                                <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=100" class="w-full h-full object-cover">
+                                            </div>
+                                            <div>
+                                                <p class="font-bold text-[#4A4036]"><?= $book->get_title() ?></p>
+                                                <p class="text-xs text-[#8C7B6C]"><?= $borrow->get_bookId() ?></p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p class="font-bold text-[#4A4036]">The Old Library</p>
-                                            <p class="text-xs text-[#8C7B6C]">ID: #101</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <button class="text-xs bg-red-50 text-red-600 px-3 py-1 rounded-full font-bold hover:bg-red-100 border border-red-100 transition-colors">
-                                        Force Return
-                                    </button>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-xs bg-red-50 text-red-600 px-3 py-1 rounded-full font-bold hover:bg-red-100 border border-red-100 transition-colors">
+                                            Force Return
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -119,7 +128,7 @@
                                 echo 'there\'s no book in the bookshelf';
                             } else {
                                 foreach ($books as $book) {
-                                    $show_book = new Book($book['id'],$book['title'], $book['author'], $book['year'], $book['status'], $book['genre']);
+                                    $show_book = new Book($book['id'], $book['title'], $book['author'], $book['year'], $book['status'], $book['genre']);
                             ?>
                                     <tr class="hover:bg-[#FDFBF7] transition-colors">
                                         <td class="px-6 py-4 font-bold text-[#4A4036]"><?= $show_book->get_title() ?></td>
@@ -245,7 +254,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="col-span-2">
                         <label class="block text-sm font-bold text-[#4A4036] mb-2">Book Title</label>
-                        <input value ="<?= isset($fields['title']) ? $fields['title'] : '' ?>" type="text" name="title" required placeholder="e.g. The Hobbit"
+                        <input value="<?= isset($fields['title']) ? $fields['title'] : '' ?>" type="text" name="title" required placeholder="e.g. The Hobbit"
                             class="w-full bg-[#FDFBF7] border border-[#E6DCCF] text-[#4A4036] rounded-lg p-3 focus:ring-[#4A4036] focus:border-[#4A4036]">
                         <?php
                         if (isset($errors['title'])) {
@@ -258,7 +267,7 @@
 
                     <div>
                         <label class="block text-sm font-bold text-[#4A4036] mb-2">Author Name</label>
-                        <input value ="<?= isset($fields['author']) ? $fields['author'] : '' ?>" type="text" name="author_name" required placeholder="e.g. J.R.R. Tolkien"
+                        <input value="<?= isset($fields['author']) ? $fields['author'] : '' ?>" type="text" name="author_name" required placeholder="e.g. J.R.R. Tolkien"
                             class="w-full bg-[#FDFBF7] border border-[#E6DCCF] text-[#4A4036] rounded-lg p-3 focus:ring-[#4A4036] focus:border-[#4A4036]">
                         <?php
                         if (isset($errors['author'])) {
