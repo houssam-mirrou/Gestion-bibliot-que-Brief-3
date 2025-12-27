@@ -15,19 +15,18 @@
                 <h2 class="text-xl font-bold text-[#4A4036]"><?= $current_user->get_first_name() . ' ' . $current_user->get_last_name() ?></h2>
                 <p class="text-sm text-[#8C7B6C] mb-4">Member since 2024</p>
 
-                <?php 
-                    if($_SESSION['role']=='admin'){
-                        echo '<span class="inline-block px-3 py-1 bg-[#F2EFE9] text-[#4A4036] text-xs font-bold uppercase tracking-wider rounded-full">
+                <?php
+                if ($_SESSION['role'] == 'admin') {
+                    echo '<span class="inline-block px-3 py-1 bg-[#F2EFE9] text-[#4A4036] text-xs font-bold uppercase tracking-wider rounded-full">
                             Admin
                         </span>';
-                    }
-                    else {
-                        echo '<span class="inline-block px-3 py-1 bg-[#F2EFE9] text-[#4A4036] text-xs font-bold uppercase tracking-wider rounded-full">
+                } else {
+                    echo '<span class="inline-block px-3 py-1 bg-[#F2EFE9] text-[#4A4036] text-xs font-bold uppercase tracking-wider rounded-full">
                             Reader
                         </span>';
-                    }
+                }
                 ?>
-                
+
             </div>
 
             <div class="bg-white rounded-2xl shadow-sm border border-[#E6DCCF] overflow-hidden mb-6">
@@ -108,6 +107,41 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#F2EFE9] text-sm">
+                            <?php
+                            if ($raw_data == []) {
+                                echo '<p class="p-6 text-center text-[#8C7B6C]">You have not borrowed any books yet.</p>';
+                            } else {
+                                foreach ($loans as $item):
+                                    // Extract objects for easier reading
+                                    $borrow = $item['borrow'];
+                                    $book   = $item['book'];
+                            ?>
+                                    <tr class="hover:bg-[#FDFBF7] transition-colors">
+                                        <td class="px-6 py-4 flex items-center gap-3">
+                                            <div class="h-10 w-8 bg-gray-200 rounded overflow-hidden">
+                                                <img src="/img/<?= strtolower($book->get_genre()) ?>.png"
+                                                    class="object-cover h-full w-full"
+                                                    onerror="this.src='https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=100'">
+                                            </div>
+                                            <span class="font-bold text-[#4A4036]"><?= $book->get_title() ?></span>
+                                        </td>
+
+                                        <td class="px-6 py-4 text-[#6B5D52]"><?= $borrow->get_borrowDate() ?></td>
+
+                                        <td class="px-6 py-4 text-[#6B5D52]">
+                                            <?= $borrow->get_returnDate() ? $borrow->get_returnDate() : 'Not returned' ?>
+                                        </td>
+
+                                        <td class="px-6 py-4 text-right">
+                                            <?php if ($borrow->is_returned()): ?>
+                                                <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold">Returned</span>
+                                            <?php else: ?>
+                                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold">Active</span>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                            <?php endforeach;
+                            } ?>
                             <tr class="hover:bg-[#FDFBF7] transition-colors">
                                 <td class="px-6 py-4 flex items-center gap-3">
                                     <div class="h-10 w-8 bg-gray-200 rounded overflow-hidden">
