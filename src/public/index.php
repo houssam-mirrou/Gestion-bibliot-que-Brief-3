@@ -1,18 +1,18 @@
 <?php
 
-require __DIR__ . '/../classes/AuthController.php';
-require __DIR__ . '/../classes/Reader.php';
-require __DIR__ . '/../classes/Admin.php';
-require __DIR__ . '/../classes/Session.php';
-require __DIR__ . '/../classes/Helpers.php';
-require __DIR__ . '/../classes/Book.php';
-require __DIR__ . '/../classes/Borrow.php';
+require __DIR__ . '/../controllers/AuthController.php';
+require __DIR__ . '/../Models/Reader.php';
+require __DIR__ . '/../Models/Admin.php';
+require __DIR__ . '/../Models/Session.php';
+require __DIR__ . '/../Models/Book.php';
+require __DIR__ . '/../Models/Borrow.php';
+require __DIR__ . '/../Utility/Database.php';
+require __DIR__ . '/../Utility/Helpers.php';
 
 $session = new Session();
 
-$config = require __DIR__ . '/../classes/config.php';
+$config = require __DIR__ . '/../Utility/config.php';
 
-require __DIR__ . '/../classes/Database.php';
 
 $data = new Database($config['database']);
 
